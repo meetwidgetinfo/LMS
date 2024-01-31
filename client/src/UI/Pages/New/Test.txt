@@ -1,0 +1,203 @@
+Step 1: Setting Up the Backend (Node.js and Express)
+Initialize the Node.js Backend:
+
+Create a new directory for your project and navigate into it.
+bash
+Copy code
+mkdir mern-leave-management
+cd mern-leave-management
+Run npm init -y to initialize a package.json file.
+Install Required Packages:
+
+Install the necessary packages using:
+bash
+Copy code
+npm install express mongoose cors body-parser
+Create the Express App:
+
+Create an index.js file for your Express server.
+javascript
+Copy code
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const app = express();
+const port = process.env.PORT || 5000;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+mongoose.connect('mongodb://localhost:27017/leavemanagement', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+Define MongoDB Schema:
+
+Create a models directory and add a Leave.js file to define the MongoDB schema for leaves.
+javascript
+Copy code
+// models/Leave.js
+const mongoose = require('mongoose');
+
+const leaveSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
+  reason: { type: String, required: true },
+  status: { type: String, default: 'pending' },
+});
+
+const Leave = mongoose.model('Leave', leaveSchema);
+
+module.exports = Leave;
+Update index.js to include the Leave model.
+javascript
+Copy code
+// index.js
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const Leave = require('./models/Leave');
+
+const app = express();
+// ... (rest of the code remains the same)
+Implement CRUD Operations:
+
+Add routes for CRUD operations in index.js.
+javascript
+Copy code
+// index.js
+// ... (previous code)
+
+// Get all leaves
+app.get('/leaves', async (req, res) => {
+  try {
+    const leaves = await Leave.find();
+    res.json(leaves);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Create a new leave
+app.post('/leaves', async (req, res) => {
+  const { userId, startDate, endDate, reason, status } = req.body;
+  try {
+    const leave = new Leave({ userId, startDate, endDate, reason, status });
+    const savedLeave = await leave.save();
+    res.json(savedLeave);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// ... (implement update and delete routes as needed)
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+Step 2: Setting Up the Frontend (React)
+Initialize the React App:
+
+In the root project directory, run:
+bash
+Copy code
+npx create-react-app client
+Move into the client directory:
+bash
+Copy code
+cd client
+Install Additional Packages:
+
+Install react-router-dom for handling routes and axios for making HTTP requests.
+bash
+Copy code
+npm install react-router-dom axios
+Create Components:
+
+Replace the contents of src/App.js with the following code:
+javascript
+Copy code
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './components/Home';
+import LeaveForm from './components/LeaveForm';
+import LeaveList from './components/LeaveList';
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/apply" component={LeaveForm} />
+          <Route path="/leaves" component={LeaveList} />
+        </Switch>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+Create three components: Home.js, LeaveForm.js, and LeaveList.js in the src/components directory.
+Implement Components:
+
+Update the content of the components to include your desired functionality. For example, LeaveForm.js could contain a form for applying for leave, and LeaveList.js could display a list of leaves.
+javascript
+Copy code
+// src/components/LeaveForm.js
+import React, { useState } from 'react';
+import axios from 'axios';
+
+function LeaveForm() {
+  const [formData, setFormData] = useState({
+    userId: 'user123', // Replace with the actual user ID
+    startDate: '',
+    endDate: '',
+    reason: '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5000/leaves', formData);
+      console.log('Leave application successful:', response.data);
+    } catch (error) {
+      console.error('Error applying for leave:', error);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Apply for Leave</h2>
+      <form onSubmit={handleSubmit}>
+        {/* Include form fields and submit button */}
+      </form>
+    </div>
+  );
+}
+
+export default LeaveForm;
+javascript
+Copy code
+// src/components/LeaveList.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function LeaveList() {
+  const [leaves, setLeaves] = useState([]);
+
+  useEffect(() => {
+    const fetchLeaves

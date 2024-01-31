@@ -1,0 +1,24 @@
+@media (max-width: 576px) {
+  .login-signup .signup {
+    padding: 30px !important;
+    height: auto !important;
+  }
+
+  .main-signup {
+    display: flex !important;
+  }
+
+  .main-signup {
+    padding: 50px 0px !important;
+  }
+
+  .login-signup .logo-img {
+    padding-top: 30px !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .main-signup {
+    padding: 50px 0px !important;
+  }
+}

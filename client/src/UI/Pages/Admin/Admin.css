@@ -1,0 +1,78 @@
+.status-cell.pending {
+  color: rgba(0, 38, 255, 0.968);
+}
+
+.status-cell.approve {
+  color: green;
+}
+
+.status-cell.reject {
+  color: red;
+}
+
+.status-cell.pending {
+  color: rgba(0, 38, 255, 0.968);
+}
+
+.status-cell.approve {
+  color: green;
+}
+
+.status-cell.reject {
+  color: red;
+}
+
+.head {
+  color: #000;
+  font-family: Poppins;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.admin .searchbar {
+  background: #c2ddfc;
+  padding: 15px;
+  flex-shrink: 0;
+}
+
+.admin .head-btn {
+  border-radius: 5px;
+  background: #191a36;
+  padding: 5px 15px;
+  color: #fff;
+  font-family: Poppins;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: grid;
+  place-content: center;
+}
+
+.admin .pos {
+  position: relative;
+}
+
+.admin .input {
+  border-radius: 6px;
+  background: #fff;
+  width: 273px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.admin .icon {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  height: 20px;
+  width: 20px;
+}
+
+@media (max-width: 576px) {
+  .admin .icon {
+    visibility: hidden;
+  }
+}
